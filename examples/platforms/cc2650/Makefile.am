@@ -30,6 +30,10 @@ include $(abs_top_nlbuild_autotools_dir)/automake/pre.am
 
 lib_LIBRARIES                                         = libopenthread-cc2650.a
 
+# Do not enable -pedantic-errors for rail
+override CFLAGS                              := $(filter-out -pedantic-errors,$(CFLAGS))
+override CXXFLAGS                            := $(filter-out -pedantic-errors,$(CXXFLAGS))
+
 libopenthread_cc2650_a_CPPFLAGS                       = \
     -I$(top_srcdir)/include                             \
     -I$(top_srcdir)/src                                 \
