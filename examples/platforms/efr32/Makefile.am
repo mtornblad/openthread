@@ -41,7 +41,7 @@ override CXXFLAGS                            := $(filter-out -pedantic-errors,$(
 EFR32MG_SDK_SRCDIR                            = $(top_srcdir)/third_party/silabs/gecko_sdk_suite/v1.1
 
 libopenthread_efr32_a_CPPFLAGS                                                = \
-    -DEFR32MG12P432F1024GL125                                                   \
+    -DEFR32MG1P132F256GM32                                                      \
     -D__START=main                                                              \
     -D__STARTUP_CLEAR_BSS                                                       \
     -I$(top_srcdir)/include                                                     \
@@ -53,9 +53,9 @@ libopenthread_efr32_a_CPPFLAGS                                                = 
     -I$(EFR32MG_SDK_SRCDIR)/platform/radio/rail_lib/chip/efr32/rf/common/cortex \
     -I$(EFR32MG_SDK_SRCDIR)/platform/radio/rail_lib/hal/efr32                   \
     -I$(EFR32MG_SDK_SRCDIR)/hardware/kit/common/bsp                             \
-    -I$(EFR32MG_SDK_SRCDIR)/hardware/kit/EFR32MG12_BRD4161A/config              \
+    -I$(EFR32MG_SDK_SRCDIR)/hardware/kit/EFR32MG1_IKEA/config                   \
     -I$(EFR32MG_SDK_SRCDIR)/platform/CMSIS/Include                              \
-    -I$(EFR32MG_SDK_SRCDIR)/platform/Device/SiliconLabs/EFR32MG12P/Include      \
+    -I$(EFR32MG_SDK_SRCDIR)/platform/Device/SiliconLabs/EFR32MG1P/Include       \
     -I$(EFR32MG_SDK_SRCDIR)/platform/emdrv/common/inc                           \
     -I$(EFR32MG_SDK_SRCDIR)/platform/emdrv/uartdrv/inc                          \
     -I$(EFR32MG_SDK_SRCDIR)/platform/emdrv/ustimer/inc                          \
@@ -86,8 +86,8 @@ endif
 nodist_libopenthread_efr32_a_SOURCES                                                                                           =  \
     @top_builddir@/third_party/silabs/gecko_sdk_suite/v1.1/hardware/kit/common/bsp/bsp_bcc.c                                      \
     @top_builddir@/third_party/silabs/gecko_sdk_suite/v1.1/hardware/kit/common/bsp/bsp_stk.c                                      \
-    @top_builddir@/third_party/silabs/gecko_sdk_suite/v1.1/platform/Device/SiliconLabs/EFR32MG12P/Source/system_efr32mg12p.c      \
-    @top_builddir@/third_party/silabs/gecko_sdk_suite/v1.1/platform/Device/SiliconLabs/EFR32MG12P/Source/GCC/startup_efr32mg12p.c \
+    @top_builddir@/third_party/silabs/gecko_sdk_suite/v1.1/platform/Device/SiliconLabs/EFR32MG1P/Source/system_efr32mg1p.c      \
+    @top_builddir@/third_party/silabs/gecko_sdk_suite/v1.1/platform/Device/SiliconLabs/EFR32MG1P/Source/GCC/startup_efr32mg1p.c \
     @top_builddir@/third_party/silabs/gecko_sdk_suite/v1.1/platform/emdrv/rtcdrv/src/rtcdriver.c                                  \
     @top_builddir@/third_party/silabs/gecko_sdk_suite/v1.1/platform/emdrv/ustimer/src/ustimer.c                                   \
     @top_builddir@/third_party/silabs/gecko_sdk_suite/v1.1/platform/emlib/src/em_adc.c                                            \
