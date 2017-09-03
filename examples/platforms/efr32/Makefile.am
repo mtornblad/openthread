@@ -53,7 +53,6 @@ libopenthread_efr32_a_CPPFLAGS                                                = 
     -I$(EFR32MG_SDK_SRCDIR)/platform/radio/rail_lib/chip/efr32/rf/common/cortex \
     -I$(EFR32MG_SDK_SRCDIR)/platform/radio/rail_lib/hal/efr32                   \
     -I$(EFR32MG_SDK_SRCDIR)/hardware/kit/common/bsp                             \
-    -I$(EFR32MG_SDK_SRCDIR)/hardware/kit/EFR32MG1_IKEA/config                   \
     -I$(EFR32MG_SDK_SRCDIR)/platform/CMSIS/Include                              \
     -I$(EFR32MG_SDK_SRCDIR)/platform/Device/SiliconLabs/EFR32MG1P/Include       \
     -I$(EFR32MG_SDK_SRCDIR)/platform/emdrv/common/inc                           \
