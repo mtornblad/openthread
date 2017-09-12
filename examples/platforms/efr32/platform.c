@@ -79,10 +79,10 @@ void PlatformInit(int argc, char *argv[])
     efr32RandomInit();
 
 
-    GPIO_PinModeSet(gpioPortA, 0, gpioModePushPull, 1);
-    GPIO_PinModeSet(gpioPortA, 1, gpioModePushPull, 1);
-    GPIO_PinModeSet(gpioPortB, 12, gpioModePushPull, 1);
-    GPIO_PinModeSet(gpioPortB, 13, gpioModePushPull, 1);
+    GPIO_PinModeSet(gpioPortA, 0, gpioModePushPull, 0);
+    GPIO_PinModeSet(gpioPortA, 1, gpioModePushPull, 0);
+    GPIO_PinModeSet(gpioPortB, 12, gpioModePushPull, 0);
+    GPIO_PinModeSet(gpioPortB, 13, gpioModePushPull, 0);
 }
 
 void PlatformDeinit(void)
