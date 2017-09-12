@@ -63,15 +63,15 @@
   {                                                                           \
     RADIO_PTI_MODE_UART,    /* Simplest output mode is UART mode */           \
     1600000,                /* Choose 1.6 MHz for best compatibility */       \
-    6,                      /* TBSENSE uses location 6 for DOUT */            \
-    gpioPortB,              /* Get the port for this loc */                   \
-    12,                     /* Get the pin, location should match above */    \
-    6,                      /* TBSENSE uses location 6 for DCLK */            \
-    gpioPortB,              /* Get the port for this loc */                   \
-    11,                     /* Get the pin, location should match above */    \
-    6,                      /* TBSENSE uses location 6 for DFRAME */          \
-    gpioPortB,              /* Get the port for this loc */                   \
-    13,                     /* Get the pin, location should match above */    \
+    0,                      /* TBSENSE uses location 6 for DOUT */            \
+    0,              		/* Get the port for this loc */                   \
+    0,                     	/* Get the pin, location should match above */    \
+    0,                      /* TBSENSE uses location 6 for DCLK */            \
+    0,              		/* Get the port for this loc */                   \
+    0,                     	/* Get the pin, location should match above */    \
+    0,                      /* TBSENSE uses location 6 for DFRAME */          \
+    0,              		/* Get the port for this loc */                   \
+    0,                     	/* Get the pin, location should match above */    \
   }
 #endif
 

@@ -77,6 +77,12 @@ void PlatformInit(int argc, char *argv[])
     efr32RadioInit();
     efr32MiscInit();
     efr32RandomInit();
+
+
+    GPIO_PinModeSet(gpioPortA, 0, gpioModePushPull, 1);
+    GPIO_PinModeSet(gpioPortA, 1, gpioModePushPull, 0);
+    GPIO_PinModeSet(gpioPortB, 12, gpioModePushPull, 0);
+    GPIO_PinModeSet(gpioPortB, 13, gpioModePushPull, 1);
 }
 
 void PlatformDeinit(void)
@@ -142,6 +148,8 @@ void halInitChipSpecific(void)
     CMU_ClockSelectSet(cmuClock_LFA, cmuSelect_LFRCO);
     CMU_ClockSelectSet(cmuClock_LFB, cmuSelect_LFRCO);
     CMU_ClockEnable(cmuClock_CORELE, true);
+    CMU_ClockEnable(cmuClock_GPIO, true);
+
 }
 
 void HAL_Init(void)
