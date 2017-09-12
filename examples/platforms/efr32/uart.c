@@ -89,7 +89,7 @@ otError otPlatUartEnable(void)
     GPIO_PinModeSet(BSP_BCC_RXPORT, BSP_BCC_RXPIN, gpioModeInput, 1u);
 
     /* Enable the switch that enables UART communication. */
-    GPIO_PinModeSet(BSP_BCC_ENABLE_PORT, BSP_BCC_ENABLE_PIN, gpioModePushPull, 1u);
+    //GPIO_PinModeSet(BSP_BCC_ENABLE_PORT, BSP_BCC_ENABLE_PIN, gpioModePushPull, 1u);
 
     CMU_ClockEnable(cmuClock_USART0, true);
 
@@ -97,11 +97,15 @@ otError otPlatUartEnable(void)
     init.enable = usartDisable;
     USART_InitAsync(usart, &init);
 
-    /* Enable pins at correct UART/USART location. */
-    usart->ROUTEPEN = USART_ROUTEPEN_RXPEN | USART_ROUTEPEN_TXPEN;
-    usart->ROUTELOC0 = (usart->ROUTELOC0 & ~(_USART_ROUTELOC0_TXLOC_MASK | _USART_ROUTELOC0_RXLOC_MASK))
-                       | (_USART_ROUTELOC0_TXLOC_LOC0 << _USART_ROUTELOC0_TXLOC_SHIFT)
-                       | (_USART_ROUTELOC0_RXLOC_LOC0 << _USART_ROUTELOC0_RXLOC_SHIFT);
+	/* Set up RX pin */
+	USART0->ROUTELOC0 = (USART0->ROUTELOC0 & (~_USART_ROUTELOC0_RXLOC_MASK))
+			| USART_ROUTELOC0_RXLOC_LOC9;
+	USART0->ROUTEPEN = USART0->ROUTEPEN | USART_ROUTEPEN_RXPEN;
+
+	/* Set up TX pin */
+	USART0->ROUTELOC0 = (USART0->ROUTELOC0 & (~_USART_ROUTELOC0_TXLOC_MASK))
+			| USART_ROUTELOC0_TXLOC_LOC9;
+	USART0->ROUTEPEN = USART0->ROUTEPEN | USART_ROUTEPEN_TXPEN;
 
     /* Clear previous RX interrupts */
     USART_IntClear(usart, USART_IF_RXDATAV);

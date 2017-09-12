@@ -20,14 +20,14 @@
 
 #define BSP_BCC_USART         USART0
 #define BSP_BCC_CLK           cmuClock_USART0
-#define BSP_BCC_TX_LOCATION   USART_ROUTELOC0_TXLOC_LOC0
-#define BSP_BCC_RX_LOCATION   USART_ROUTELOC0_RXLOC_LOC0
-#define BSP_BCC_TXPORT        gpioPortA
-#define BSP_BCC_TXPIN         0
-#define BSP_BCC_RXPORT        gpioPortA
-#define BSP_BCC_RXPIN         1
-#define BSP_BCC_ENABLE_PORT   gpioPortA
-#define BSP_BCC_ENABLE_PIN    5                 /* VCOM_ENABLE */
+#define BSP_BCC_TX_LOCATION   USART_ROUTELOC0_TXLOC_LOC9
+#define BSP_BCC_RX_LOCATION   USART_ROUTELOC0_RXLOC_LOC9
+#define BSP_BCC_TXPORT        gpioPortB
+#define BSP_BCC_TXPIN         14
+#define BSP_BCC_RXPORT        gpioPortB
+#define BSP_BCC_RXPIN         15
+//#define BSP_BCC_ENABLE_PORT   gpioPortA
+//#define BSP_BCC_ENABLE_PIN    5                 /* VCOM_ENABLE */
 
 
 #define BSP_INIT_DEFAULT  0
@@ -63,15 +63,15 @@
   {                                                                           \
     RADIO_PTI_MODE_UART,    /* Simplest output mode is UART mode */           \
     1600000,                /* Choose 1.6 MHz for best compatibility */       \
-    0,                      /* TBSENSE uses location 6 for DOUT */            \
-    0,              		/* Get the port for this loc */                   \
-    0,                     	/* Get the pin, location should match above */    \
-    0,                      /* TBSENSE uses location 6 for DCLK */            \
-    0,              		/* Get the port for this loc */                   \
-    0,                     	/* Get the pin, location should match above */    \
-    0,                      /* TBSENSE uses location 6 for DFRAME */          \
-    0,              		/* Get the port for this loc */                   \
-    0,                     	/* Get the pin, location should match above */    \
+    12,                      /* TBSENSE uses location 6 for DOUT */            \
+    gpioPortC,              		/* Get the port for this loc */                   \
+    9,                     	/* Get the pin, location should match above */    \
+    12,                      /* TBSENSE uses location 6 for DCLK */            \
+    gpioPortC,              		/* Get the port for this loc */                   \
+    7,                     	/* Get the pin, location should match above */    \
+    12,                      /* TBSENSE uses location 6 for DFRAME */          \
+    gpioPortC,              		/* Get the port for this loc */                   \
+    8,                     	/* Get the pin, location should match above */    \
   }
 #endif
 
