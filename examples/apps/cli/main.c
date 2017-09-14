@@ -29,57 +29,50 @@
 #include <openthread/config.h>
 #include <openthread-core-config.h>
 #include <assert.h>
+#include <assert.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
+
 
 #include <openthread/cli.h>
 #include <openthread/diag.h>
 #include <openthread/openthread.h>
+#include <openthread/coap.h>
 #include <openthread/platform/platform.h>
 #include <openthread/platform/logging.h>
 
-#if OPENTHREAD_ENABLE_MULTIPLE_INSTANCES
-void *otPlatCAlloc(size_t aNum, size_t aSize)
-{
-    return calloc(aNum, aSize);
-}
-
-void otPlatFree(void *aPtr)
-{
-    free(aPtr);
-}
-#endif
+#define THREAD_CHANNEL 11
+#define THREAD_PANID 0xabcd
 
 void otTaskletsSignalPending(otInstance *aInstance)
 {
     (void)aInstance;
 }
 
+
 int main(int argc, char *argv[])
 {
     otInstance *sInstance;
 
-#if OPENTHREAD_ENABLE_MULTIPLE_INSTANCES
-    size_t otInstanceBufferLength = 0;
-    uint8_t *otInstanceBuffer = NULL;
-#endif
-
     PlatformInit(argc, argv);
-
-#if OPENTHREAD_ENABLE_MULTIPLE_INSTANCES
-    // Call to query the buffer size
-    (void)otInstanceInit(NULL, &otInstanceBufferLength);
-
-    // Call to allocate the buffer
-    otInstanceBuffer = (uint8_t *)malloc(otInstanceBufferLength);
-    assert(otInstanceBuffer);
-
-    // Initialize OpenThread with the buffer
-    sInstance = otInstanceInit(otInstanceBuffer, &otInstanceBufferLength);
-#else
     sInstance = otInstanceInitSingle();
-#endif
     assert(sInstance);
 
     otCliUartInit(sInstance);
+    //coap_init();
+
+    if (!otDatasetIsCommissioned(sInstance))
+    {
+        assert(otLinkSetChannel(sInstance, THREAD_CHANNEL) == OT_ERROR_NONE);
+        assert(otLinkSetPanId(sInstance, THREAD_PANID) == OT_ERROR_NONE);
+    }
+
+    assert(otIp6SetEnabled(sInstance, true) == OT_ERROR_NONE);
+    assert(otThreadSetEnabled(sInstance, true) == OT_ERROR_NONE);
+
+//    m_app.p_ot_instance = sInstance;
+
 
 #if OPENTHREAD_ENABLE_DIAG
     otDiagInit(sInstance);
@@ -91,10 +84,6 @@ int main(int argc, char *argv[])
         PlatformProcessDrivers(sInstance);
     }
 
-    // otInstanceFinalize(sInstance);
-#if OPENTHREAD_ENABLE_MULTIPLE_INSTANCES
-    // free(otInstanceBuffer);
-#endif
 
     return 0;
 }
