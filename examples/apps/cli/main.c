@@ -208,7 +208,6 @@ int main(int argc, char *argv[])
 
     otCliUartInit(sInstance);
 
-    /*
     if (!otDatasetIsCommissioned(sInstance))
     {
         assert(otLinkSetChannel(sInstance, THREAD_CHANNEL) == OT_ERROR_NONE);
@@ -217,7 +216,7 @@ int main(int argc, char *argv[])
 
     assert(otIp6SetEnabled(sInstance, true) == OT_ERROR_NONE);
     assert(otThreadSetEnabled(sInstance, true) == OT_ERROR_NONE);
-*/
+
     m_app.p_ot_instance = sInstance;
     coap_init();
 

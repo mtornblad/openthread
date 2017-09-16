@@ -1,5 +1,5 @@
 erase
-loadbin output/efr32/bin/ot-cli-ftd.bin,0x0
+loadfile output/efr32/bin/ot-cli-ftd.hex
 r
 g
 exit
