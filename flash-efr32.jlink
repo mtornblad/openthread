@@ -1,0 +1,6 @@
+erase
+loadbin output/efr32/bin/ot-cli-ftd.bin,0x0
+r
+g
+exit
+
