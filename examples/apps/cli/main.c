@@ -47,6 +47,9 @@
 
 #define THREAD_CHANNEL 11
 #define THREAD_PANID 0xABCD
+#define LESHAN_ADDRESS "fd00:0064:0123:4567::0527:53ce"
+//#define LESHAN_ADDRESS "fdde:ad00:beef:0:9a0d:c0ac:5291:2d9a"
+
 
 static void light_request_handler(void                * p_context,
                                   otCoapHeader        * p_header,
@@ -69,7 +72,7 @@ typedef struct
 application_t m_app =
 {
     .p_ot_instance         = NULL,
-    .light_resource        = {"light", light_request_handler, NULL, NULL},
+    .light_resource        = {"3311/0/5850", light_request_handler, NULL, NULL},
 };
 
 /***************************************************************************************************
@@ -88,14 +91,13 @@ static void light_response_send(void                * p_context,
     {
         otCoapHeaderInit(&header, OT_COAP_TYPE_ACKNOWLEDGMENT, OT_COAP_CODE_CHANGED);
         otCoapHeaderSetMessageId(&header, otCoapHeaderGetMessageId(p_request_header));
-        otCoapHeaderSetToken(&header,
-                             otCoapHeaderGetToken(p_request_header),
-                             otCoapHeaderGetTokenLength(p_request_header));
+        otCoapHeaderSetToken(&header, otCoapHeaderGetToken(p_request_header), otCoapHeaderGetTokenLength(p_request_header));
 
         p_response = otCoapNewMessage(p_context, &header);
         if (p_response == NULL)
         {
             break;
+            //assert(false);
         }
 
         error = otCoapSendResponse(p_context, p_response, p_message_info);
@@ -104,6 +106,7 @@ static void light_response_send(void                * p_context,
 
     if (error != OT_ERROR_NONE && p_response != NULL)
     {
+        assert(false);
         otMessageFree(p_response);
     }
 }
@@ -115,6 +118,8 @@ static void light_request_handler(void                * p_context,
 {
     (void)p_message;
     uint8_t command;
+
+    //assert(false);
 
     do
     {
@@ -131,7 +136,7 @@ static void light_request_handler(void                * p_context,
 
         if (otMessageRead(p_message, otMessageGetOffset(p_message), &command, 1) != 1)
         {
-  //          NRF_LOG_INFO("light handler - missing command\r\n");
+        	// missing command
         }
 
         switch (command)
@@ -162,6 +167,57 @@ void otTaskletsSignalPending(otInstance *aInstance)
     (void)aInstance;
 }
 
+
+static void unicast_register_request_send()
+{
+    otError       error = OT_ERROR_NONE;
+    otMessage   * p_message;
+    otMessageInfo messageInfo;
+    otCoapHeader  header;
+    otInstance *  p_instance = m_app.p_ot_instance;
+    uint8_t 	  command[]="</0/0>,</0/1>,</0/2>,</1/1>,</3/0>,</3311/0>";
+    otIp6Address  coapDestinationIp;
+
+    do
+    {
+        otCoapHeaderInit(&header, OT_COAP_TYPE_CONFIRMABLE, OT_COAP_CODE_POST);
+        otCoapHeaderGenerateToken(&header, 2);
+        otCoapHeaderAppendUriPathOptions(&header, "rd");
+        otCoapHeaderAppendUriQueryOption(&header, "ep=ikeatest");
+        otCoapHeaderAppendUriQueryOption(&header, "lt=600");
+		otCoapHeaderSetPayloadMarker(&header);
+
+        p_message = otCoapNewMessage(p_instance, &header);
+        if (p_message == NULL)
+        {
+            //NRF_LOG_INFO("Failed to allocate message for CoAP Request\r\n");
+            break;
+        }
+
+        error = otMessageAppend(p_message, &command, sizeof(command)-1); //remote string terminatior
+        if (error != OT_ERROR_NONE)
+        {
+            break;
+        }
+
+        memset(&messageInfo, 0, sizeof(messageInfo));
+        messageInfo.mInterfaceId = OT_NETIF_INTERFACE_ID_THREAD;
+        messageInfo.mPeerPort = OT_DEFAULT_COAP_PORT;
+        error = otIp6AddressFromString(LESHAN_ADDRESS, &coapDestinationIp);
+        messageInfo.mPeerAddr = coapDestinationIp;
+
+        error = otCoapSendRequest(p_instance, p_message, &messageInfo, NULL, NULL);
+    } while (false);
+
+    if (error != OT_ERROR_NONE && p_message != NULL)
+    {
+        //Failed to send CoAP Request
+        otMessageFree(p_message);
+    }
+}
+
+
+
 static void coap_init()
 {
     m_app.light_resource.mContext = m_app.p_ot_instance;
@@ -170,9 +226,11 @@ static void coap_init()
     assert(otCoapAddResource(m_app.p_ot_instance, &m_app.light_resource) == OT_ERROR_NONE);
 }
 
-
 int main(int argc, char *argv[])
 {
+
+	uint32_t c=100000;
+	bool registered = false;
     otInstance *sInstance;
 
     PlatformInit(argc, argv);
@@ -180,6 +238,9 @@ int main(int argc, char *argv[])
     assert(sInstance);
 
     otCliUartInit(sInstance);
+
+    //assert(otSetStateChangedCallback(sInstance, &state_changed_callback, sInstance) == OT_ERROR_NONE);
+
 
     if (!otDatasetIsCommissioned(sInstance))
     {
@@ -193,7 +254,6 @@ int main(int argc, char *argv[])
     m_app.p_ot_instance = sInstance;
     coap_init();
 
-
 #if OPENTHREAD_ENABLE_DIAG
     otDiagInit(sInstance);
 #endif
@@ -202,9 +262,16 @@ int main(int argc, char *argv[])
     {
         otTaskletsProcess(sInstance);
         PlatformProcessDrivers(sInstance);
+        c--;
+        if (c==0)
+        {
+        	if (registered==false) {
+        		unicast_register_request_send();
+            	registered=true;
+        	}
+        }
     }
 
-coap_init();
 
     return 0;
 }
