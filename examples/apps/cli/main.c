@@ -56,16 +56,9 @@ static void light_request_handler(void                * p_context,
 
 typedef enum
 {
-    DEVICE_TYPE_REMOTE_CONTROL,
     DEVICE_TYPE_LIGHT
 } device_type_t;
 
-typedef enum
-{
-    LIGHT_OFF = 0,
-    LIGHT_ON,
-    LIGHT_TOGGLE
-} light_command_t;
 
 typedef struct
 {
@@ -83,26 +76,11 @@ application_t m_app =
  * @section CoAP
  **************************************************************************************************/
 
-static void light_on(void)
-{
-    GPIO_PinModeSet(gpioPortA, 0, gpioModePushPull, 1);
-}
-
-static void light_off(void)
-{
-    GPIO_PinModeSet(gpioPortA, 0, gpioModePushPull, 0);
-}
-
-static void light_toggle(void)
-{
-    //LEDS_INVERT(BSP_LED_3_MASK);
-}
-
 static void light_response_send(void                * p_context,
                                 otCoapHeader        * p_request_header,
                                 const otMessageInfo * p_message_info)
 {
-    otError      error = OT_ERROR_NONE;
+    otError      error 	= OT_ERROR_NONE;
     otCoapHeader header;
     otMessage  * p_response;
 
@@ -158,20 +136,15 @@ static void light_request_handler(void                * p_context,
 
         switch (command)
         {
-            case LIGHT_ON:
-                light_on();
-                break;
+        case '1':
+            GPIO_PinModeSet(gpioPortB, 13, gpioModePushPull, 1);
+            break;
 
-            case LIGHT_OFF:
-                light_off();
-                break;
-
-            case LIGHT_TOGGLE:
-                light_toggle();
-                break;
-
-            default:
-                break;
+        case '0':
+            GPIO_PinModeSet(gpioPortB, 13, gpioModePushPull, 0);
+            break;
+		default:
+			break;
         }
 
         if (otCoapHeaderGetType(p_header) == OT_COAP_TYPE_CONFIRMABLE)
